@@ -1,7 +1,9 @@
+---
+
 nextcloud_davfs:
   osuser:
   url:
   clouduser:
   password:
-  cleanup: False
-  nextrsync: False
+  cleanup: false
+  nextrsync: false
