@@ -1,2 +1,7 @@
----
-# defaults file for nextcloud_davfs
+nextcloud_davfs:
+  osuser:
+  url:
+  clouduser:
+  password:
+  cleanup: False
+  nextrsync: False
