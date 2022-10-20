@@ -35,7 +35,7 @@
     regexp: "table_size"
     line: "table_size        32768"
 
-- name: "Ensure Nextcloud directory /home/{{ nextcloud_davfs.osuser }}/Nextcloud"
+- name: "Ensure Nextcloud directory in /home/{{ nextcloud_davfs.osuser }}"
   ansible.builtin.file:
     path: "/home/{{ nextcloud_davfs.osuser }}/Nextcloud"
     state: directory
@@ -43,7 +43,7 @@
     group: root
     mode: 0700
 
-- name: "Configure /home/{{ nextcloud_davfs.osuser }}/Nextcloud mount"
+- name: "Configure Nextcloud mount in /home/{{ nextcloud_davfs.osuser }}"
   ansible.posix.mount:
     path: "/home/{{ nextcloud_davfs.osuser }}/Nextcloud"
     src: https://cloud.oxi.ch/remote.php/webdav
@@ -51,7 +51,7 @@
     opts: "user,auto,uid={{ nextcloud_davfs.osuser }},file_mode=600,dir_mode=700,_netdev"
     state: mounted
 
-- name: "Ensure Nextcloud directory /home/{{ nextcloud_davfs.osuser }}/.nextrsync"
+- name: "Ensure Nextcloud .nextrsync directory in /home/{{ nextcloud_davfs.osuser }}"
   ansible.builtin.file:
     path: "/home/{{ nextcloud_davfs.osuser }}/.nextrsync"
     state: directory
@@ -60,7 +60,7 @@
     mode: 0700
   when: nextcloud_davfs.nextrsync
 
-- name: "Configure /home/{{ nextcloud_davfs.osuser }}/.nextrsync mount"
+- name: "Configure .nextrsync mount in /home/{{ nextcloud_davfs.osuser }}"
   ansible.posix.mount:
     path: "/home/{{ nextcloud_davfs.osuser }}/.nextrsync"
     src: tmpfs
