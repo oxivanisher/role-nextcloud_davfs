@@ -1,5 +1,4 @@
 ---
-
 nextcloud_davfs:
   osuser:
   url:

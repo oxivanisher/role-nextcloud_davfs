@@ -1,5 +1,4 @@
 ---
-
 - name: Install davfs2
   ansible.builtin.package:
     name: davfs2
@@ -41,7 +40,7 @@
     state: directory
     owner: "{{ nextcloud_davfs.osuser }}"
     group: root
-    mode: 0700
+    mode: "0700"
 
 - name: "Configure Nextcloud mount in /home/{{ nextcloud_davfs.osuser }}"
   ansible.posix.mount:
@@ -57,7 +56,7 @@
     state: directory
     owner: "{{ nextcloud_davfs.osuser }}"
     group: root
-    mode: 0700
+    mode: "0700"
   when: nextcloud_davfs.nextrsync
 
 - name: "Configure .nextrsync mount in /home/{{ nextcloud_davfs.osuser }}"
