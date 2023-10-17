@@ -50,7 +50,5 @@ galaxy_info:
     - nextcloud
     - davfs
 
-dependencies: []
-
-collections:
-  - ansible.posix
+dependencies:
+  - role: ansible.posix.mount
