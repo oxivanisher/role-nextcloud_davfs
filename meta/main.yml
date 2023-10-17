@@ -51,4 +51,5 @@ galaxy_info:
     - davfs
 
 dependencies:
-  - role: ansible.posix.mount
+  []
+  # - role: ansible.posix.mount
