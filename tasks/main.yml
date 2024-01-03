@@ -7,8 +7,8 @@
 - name: Configure secrets
   ansible.builtin.lineinfile:
     path: /etc/davfs2/secrets
-    regexp: "^{{ nextcloud_davfs.url }}"
-    line: "{{ nextcloud_davfs.url }} {{ nextcloud_davfs_cloud_user }} {{ nextcloud_davfs_cloud_password }}"
+    regexp: "^{{ nextcloud_davfs_cloud_url }}"
+    line: "{{ nextcloud_davfs_cloud_url }} {{ nextcloud_davfs_cloud_user }} {{ nextcloud_davfs_cloud_password }}"
 
 - name: Configure dav2fs option buf_size
   ansible.builtin.lineinfile:

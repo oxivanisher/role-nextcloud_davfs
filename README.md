@@ -16,7 +16,7 @@ Role Variables
 |---------------|--------------------------------------|---------------|
 | nextcloud_davfs_osuser  | The OS user the directory will be configured in  |           |
 | nextcloud_davfs_osdir  | The directory in the os users home where the cloud will be mounted | `Nextcloud`          |
-| nextcloud_davfs.url | Your Nextcloud webdav URL (i.e. https://your.cloud.tld/remote.php/webdav) |           |
+| nextcloud_davfs_cloud_url | Your Nextcloud webdav URL (i.e. https://your.cloud.tld/remote.php/webdav) |           |
 | nextcloud_davfs_cloud_user | Your Nextcloud user |           |
 | nextcloud_davfs_cloud_password | Your Nextcloud password |           |
 | nextcloud_davfs_nextrsync | Enable `nextrsync` feature | `False`          |
