@@ -8,7 +8,7 @@
   ansible.builtin.lineinfile:
     path: /etc/davfs2/secrets
     regexp: "^{{ nextcloud_davfs.url }}"
-    line: "{{ nextcloud_davfs.url }} {{ nextcloud_davfs.clouduser }} {{ nextcloud_davfs.password }}"
+    line: "{{ nextcloud_davfs.url }} {{ nextcloud_davfs_cloud_user }} {{ nextcloud_davfs_cloud_password }}"
 
 - name: Configure dav2fs option buf_size
   ansible.builtin.lineinfile:
@@ -34,62 +34,68 @@
     regexp: "table_size"
     line: "table_size        32768"
 
-- name: "Ensure Nextcloud directory in /home/{{ nextcloud_davfs.osuser }}"
+- name: "Ensure Nextcloud directory in /home/{{ nextcloud_davfs_osuser }}"
   ansible.builtin.file:
-    path: "/home/{{ nextcloud_davfs.osuser }}/Nextcloud"
+    path: "/home/{{ nextcloud_davfs_osuser }}/{{ nextcloud_davfs_osdir }}"
     state: directory
-    owner: "{{ nextcloud_davfs.osuser }}"
+    owner: "{{ nextcloud_davfs_osuser }}"
     group: root
     mode: "0700"
 
-- name: "Configure Nextcloud mount in /home/{{ nextcloud_davfs.osuser }}"
+- name: "Configure Nextcloud mount in /home/{{ nextcloud_davfs_osuser }}"
   ansible.posix.mount:
-    path: "/home/{{ nextcloud_davfs.osuser }}/Nextcloud"
+    path: "/home/{{ nextcloud_davfs_osuser }}/{{ nextcloud_davfs_osdir }}"
     src: https://cloud.oxi.ch/remote.php/webdav
     fstype: davfs
-    opts: "user,auto,uid={{ nextcloud_davfs.osuser }},file_mode=600,dir_mode=700,_netdev"
+    opts: "user,auto,uid={{ nextcloud_davfs_osuser }},file_mode=600,dir_mode=700,_netdev"
     state: mounted
 
-- name: "Ensure Nextcloud .nextrsync directory in /home/{{ nextcloud_davfs.osuser }}"
+- name: "Ensure Nextcloud .nextrsync directory in /home/{{ nextcloud_davfs_osuser }}"
   ansible.builtin.file:
-    path: "/home/{{ nextcloud_davfs.osuser }}/.nextrsync"
+    path: "/home/{{ nextcloud_davfs_osuser }}/.nextrsync"
     state: directory
-    owner: "{{ nextcloud_davfs.osuser }}"
+    owner: "{{ nextcloud_davfs_osuser }}"
     group: root
     mode: "0700"
-  when: nextcloud_davfs.nextrsync
+  when: nextcloud_davfs_nextrsync
 
-- name: "Configure .nextrsync mount in /home/{{ nextcloud_davfs.osuser }}"
+- name: "Configure .nextrsync mount in /home/{{ nextcloud_davfs_osuser }}"
   ansible.posix.mount:
-    path: "/home/{{ nextcloud_davfs.osuser }}/.nextrsync"
+    path: "/home/{{ nextcloud_davfs_osuser }}/.nextrsync"
     src: tmpfs
     fstype: tmpfs
-    opts: "size=50m,nosuid,mode=0700,gid=root,uid={{ nextcloud_davfs.osuser }}"
+    opts: "size=50m,nosuid,mode=0700,gid=root,uid={{ nextcloud_davfs_osuser }}"
     state: mounted
-  when: nextcloud_davfs.nextrsync
+  when: nextcloud_davfs_nextrsync
 
 - name: Configure nextcloud cleanup
   ansible.builtin.cron:
-    name: "Nextcloud tmp cleanup for {{ nextcloud_davfs.osuser }}"
-    user: "{{ nextcloud_davfs.osuser }}"
+    name: "Nextcloud tmp cleanup for {{ nextcloud_davfs_osuser }}"
+    user: "{{ nextcloud_davfs_osuser }}"
     hour: 4
     minute: 30
     day: 5
-    job: "/bin/bash /home/{{ nextcloud_davfs.osuser }}/.nextrsync/scripts/cleanup"
-  when: nextcloud_davfs.cleanup
+    job: "/bin/bash /home/{{ nextcloud_davfs_osuser }}/.nextrsync/scripts/cleanup"
+  when: nextcloud_davfs_cleanup
+
+- name: Install rsync for nextrsync
+  ansible.builtin.package:
+    name: rsync
+    state: present
+  when: nextcloud_davfs_nextrsync
 
 - name: Configure nextrsync crontab
   ansible.builtin.cron:
-    name: "Nextrsync for {{ nextcloud_davfs.osuser }}"
-    user: "{{ nextcloud_davfs.osuser }}"
+    name: "Nextrsync for {{ nextcloud_davfs_osuser }}"
+    user: "{{ nextcloud_davfs_osuser }}"
     minute: "*/5"
-    job: "/bin/bash /home/{{ nextcloud_davfs.osuser }}/Nextcloud/scripts/nextrsync"
-  when: nextcloud_davfs.nextrsync
+    job: "/bin/bash /home/{{ nextcloud_davfs_osuser }}/{{ nextcloud_davfs_osdir }}/scripts/nextrsync"
+  when: nextcloud_davfs_nextrsync
 
 - name: Configure nextrsync at boot
   ansible.builtin.cron:
-    name: "Nextrsync for {{ nextcloud_davfs.osuser }} at boot"
-    user: "{{ nextcloud_davfs.osuser }}"
+    name: "Nextrsync for {{ nextcloud_davfs_osuser }} at boot"
+    user: "{{ nextcloud_davfs_osuser }}"
     special_time: reboot
-    job: "/bin/bash /home/{{ nextcloud_davfs.osuser }}/Nextcloud/scripts/nextrsync"
-  when: nextcloud_davfs.nextrsync
+    job: "/bin/bash /home/{{ nextcloud_davfs_osuser }}/{{ nextcloud_davfs_osdir }}/scripts/nextrsync"
+  when: nextcloud_davfs_nextrsync

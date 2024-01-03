@@ -1,8 +1,8 @@
 ---
-nextcloud_davfs:
-  osuser:
-  url:
-  clouduser:
-  password:
-  cleanup: false
-  nextrsync: false
+nextcloud_davfs_osuser:
+nextcloud_davfs_osdir: Nextcloud
+nextcloud_davfs.url:
+nextcloud_davfs_cloud_user:
+nextcloud_davfs_cloud_password:
+nextcloud_davfs_nextrsync: False
+nextcloud_davfs_cleanup: False
