@@ -6,3 +6,4 @@ nextcloud_davfs_cloud_user:
 nextcloud_davfs_cloud_password:
 nextcloud_davfs_nextrsync: false
 nextcloud_davfs_cleanup: false
+nextcloud_devfs_cache_size: 500
