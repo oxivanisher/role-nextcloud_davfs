@@ -34,7 +34,7 @@
   ansible.builtin.lineinfile:
     path: /etc/davfs2/davfs2.conf
     regexp: "cache_size"
-    line: "cache_size       {{ nextcloud_devfs_cache_size }}"
+    line: "cache_size        {{ nextcloud_devfs_cache_size }}"
   become: true
   become_user: root
 
