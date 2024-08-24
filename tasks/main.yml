@@ -113,7 +113,9 @@
     name: "Nextrsync for {{ nextcloud_davfs_osuser }}"
     user: "{{ nextcloud_davfs_osuser }}"
     minute: "*/5"
-    job: "/bin/bash /home/{{ nextcloud_davfs_osuser }}/{{ nextcloud_davfs_osdir }}/scripts/nextrsync"
+    job: >
+      "/bin/bash /home/{{ nextcloud_davfs_osuser }}/{{ nextcloud_davfs_osdir }}/scripts/nextrsync
+      3>&2 2>&1 1>&3- | grep -Ev 'Resource temporarily unavailable|Input/output error'"
   when: nextcloud_davfs_nextrsync
   become: true
   become_user: root
