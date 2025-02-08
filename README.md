@@ -1,5 +1,6 @@
 nextcloud_davfs
 ===============
+[![Ansible Lint](https://github.com/oxivanisher/role-nextcloud_davfs/actions/workflows/ansible-lint.yml/badge.svg)](https://github.com/oxivanisher/role-nextcloud_davfs/actions/workflows/ansible-lint.yml)
 
 Install and configure your nextcloud client directory on a linux server with the help of davfs.
 There are two special functions concerning `nextrsync` and `cleanup`.
