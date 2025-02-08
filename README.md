@@ -21,7 +21,7 @@ Role Variables
 | nextcloud_davfs_cloud_password | Your Nextcloud password                                                   |               |
 | nextcloud_davfs_nextrsync      | Enable `nextrsync` feature                                                | `False`       |
 | nextcloud_davfs_cleanup        | Enable `cleanup` feature                                                  | `False`       |
-| nextcloud_devfs_cache_size     | The davfs cache size                                                      | `500`         |
+| nextcloud_davfs_cache_size     | The davfs cache size                                                      | `500`         |
 
 Dependencies
 ------------
