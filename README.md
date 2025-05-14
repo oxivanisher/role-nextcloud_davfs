@@ -15,7 +15,8 @@ Role Variables
 
 | Name                           | Comment                                                                   | Default value |
 |--------------------------------|---------------------------------------------------------------------------|---------------|
-| nextcloud_davfs_osuser         | The OS user the directory will be configured in                           |               |
+| nextcloud_davfs_osuser         | The OS user of the directory will be configured in                        |               |
+| nextcloud_davfs_osgroup        | The OS group of the directory will be configured in                       | nextcloud_davfs_osuser |
 | nextcloud_davfs_osdir          | The directory in the os users home where the cloud will be mounted        | `Nextcloud`   |
 | nextcloud_davfs_cloud_url      | Your Nextcloud webdav URL (i.e. https://your.cloud.tld/remote.php/webdav) |               |
 | nextcloud_davfs_cloud_user     | Your Nextcloud user                                                       |               |
