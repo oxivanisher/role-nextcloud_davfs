@@ -61,7 +61,7 @@
     path: "/home/{{ nextcloud_davfs_osuser }}/{{ nextcloud_davfs_osdir }}"
     src: https://cloud.oxi.ch/remote.php/webdav
     fstype: davfs
-    opts: "user,auto,uid={{ nextcloud_davfs_osuser }},gid={{ nextcloud_davfs_osgroup | default(nextcloud_davfs_osuser) }},file_mode=600,dir_mode=700,_netdev"
+    opts: "user,auto,uid={{ nextcloud_davfs_osuser }},gid={{ nextcloud_davfs_osgroup }},file_mode=600,dir_mode=700,_netdev"
     state: mounted
   become: true
   become_user: root

@@ -1,6 +1,6 @@
 ---
 nextcloud_davfs_osuser:
-nextcloud_davfs_osgroup:
+nextcloud_davfs_osgroup: "{{ nextcloud_davfs_osuser }}"
 nextcloud_davfs_osdir: Nextcloud
 nextcloud_davfs_cloud_url:
 nextcloud_davfs_cloud_user:
