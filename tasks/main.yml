@@ -51,7 +51,7 @@
     path: "/home/{{ nextcloud_davfs_osuser }}/{{ nextcloud_davfs_osdir }}"
     state: directory
     owner: "{{ nextcloud_davfs_osuser }}"
-    group: root
+    group: "{{ nextcloud_davfs_osgroup }}"
     mode: "0700"
   become: true
   become_user: root
@@ -71,7 +71,7 @@
     path: "/home/{{ nextcloud_davfs_osuser }}/.nextrsync"
     state: directory
     owner: "{{ nextcloud_davfs_osuser }}"
-    group: root
+    group: "{{ nextcloud_davfs_osgroup }}"
     mode: "0700"
   when: nextcloud_davfs_nextrsync
   become: true
