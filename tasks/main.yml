@@ -88,18 +88,6 @@
   become: true
   become_user: root
 
-- name: Configure nextcloud cleanup
-  ansible.builtin.cron:
-    name: "Nextcloud tmp cleanup for {{ nextcloud_davfs_osuser }}"
-    user: "{{ nextcloud_davfs_osuser }}"
-    hour: 4
-    minute: 30
-    day: 5
-    job: "/bin/bash /home/{{ nextcloud_davfs_osuser }}/.nextrsync/scripts/cleanup"
-  when: nextcloud_davfs_cleanup
-  become: true
-  become_user: root
-
 - name: Install rsync for nextrsync
   ansible.builtin.package:
     name: rsync
