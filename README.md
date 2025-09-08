@@ -13,17 +13,18 @@ You need a Nextcloud (ownCloud will probably also work). Also you should use a s
 Role Variables
 --------------
 
-| Name                           | Comment                                                                   | Default value |
-|--------------------------------|---------------------------------------------------------------------------|---------------|
-| nextcloud_davfs_osuser         | The OS user of the directory will be configured in                        |               |
-| nextcloud_davfs_osgroup        | The OS group of the directory will be configured in                       | nextcloud_davfs_osuser |
-| nextcloud_davfs_osdir          | The directory in the os users home where the cloud will be mounted        | `Nextcloud`   |
-| nextcloud_davfs_cloud_url      | Your Nextcloud webdav URL (i.e. https://your.cloud.tld/remote.php/webdav) |               |
-| nextcloud_davfs_cloud_user     | Your Nextcloud user                                                       |               |
-| nextcloud_davfs_cloud_password | Your Nextcloud password                                                   |               |
-| nextcloud_davfs_nextrsync      | Enable `nextrsync` feature                                                | `False`       |
-| nextcloud_davfs_cleanup        | Enable `cleanup` feature                                                  | `False`       |
-| nextcloud_davfs_cache_size     | The davfs cache size                                                      | `500`         |
+| Name                            | Comment                                                                   | Default value          |
+| ------------------------------- | ------------------------------------------------------------------------- | ---------------------- |
+| nextcloud_davfs_osuser          | The OS user of the directory will be configured in                        |                        |
+| nextcloud_davfs_osgroup         | The OS group of the directory will be configured in                       | nextcloud_davfs_osuser |
+| nextcloud_davfs_osdir           | The directory in the os users home where the cloud will be mounted        | `Nextcloud`            |
+| nextcloud_davfs_cloud_url       | Your Nextcloud webdav URL (i.e. https://your.cloud.tld/remote.php/webdav) |                        |
+| nextcloud_davfs_cloud_user      | Your Nextcloud user                                                       |                        |
+| nextcloud_davfs_cloud_password  | Your Nextcloud password                                                   |                        |
+| nextcloud_davfs_nextrsync       | Enable `nextrsync` feature                                                | `false`                |
+| nextcloud_davfs_nextrsync_tmpfs | Put the `nextrsync` feature in a tmpfs                                    | `false`                |
+| nextcloud_davfs_cleanup         | Enable `cleanup` feature                                                  | `false`                |
+| nextcloud_davfs_cache_size      | The davfs cache size                                                      | `500`                  |
 
 Dependencies
 ------------

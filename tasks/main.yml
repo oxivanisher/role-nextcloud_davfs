@@ -6,6 +6,14 @@
   become: true
   become_user: root
 
+- name: Adding osuser to davfs2 group to let him mount it itself
+  ansible.builtin.user:
+    name: '{{ nextcloud_davfs_osuser }}'
+    groups: davfs2
+    append: true
+  become: true
+  become_user: root
+
 - name: Configure secrets
   ansible.builtin.lineinfile:
     path: /etc/davfs2/secrets
@@ -84,7 +92,7 @@
     fstype: tmpfs
     opts: "size=50m,nosuid,mode=0700,gid=root,uid={{ nextcloud_davfs_osuser }}"
     state: mounted
-  when: nextcloud_davfs_nextrsync
+  when: nextcloud_davfs_nextrsync and nextcloud_davfs_nextrsync_tmpfs
   become: true
   become_user: root
 
