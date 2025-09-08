@@ -22,7 +22,7 @@ Role Variables
 | nextcloud_davfs_cloud_user      | Your Nextcloud user                                                       |                        |
 | nextcloud_davfs_cloud_password  | Your Nextcloud password                                                   |                        |
 | nextcloud_davfs_nextrsync       | Enable `nextrsync` feature                                                | `false`                |
-| nextcloud_davfs_nextrsync_tmpfs | Put the `nextrsync` feature in a tmpfs                                    | `false`                |
+| nextcloud_davfs_nextrsync_tmpfs | Put the `nextrsync` feature in a tmpfs                                    | `true`                 |
 | nextcloud_davfs_cleanup         | Enable `cleanup` feature                                                  | `false`                |
 | nextcloud_davfs_cache_size      | The davfs cache size                                                      | `500`                  |
 
