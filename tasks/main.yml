@@ -81,7 +81,7 @@
     owner: "{{ nextcloud_davfs_osuser }}"
     group: "{{ nextcloud_davfs_osgroup }}"
     mode: "0700"
-  when: nextcloud_davfs_nextrsync
+  when: nextcloud_davfs_nextrsync | bool
   become: true
   become_user: root
 
@@ -92,7 +92,7 @@
     fstype: tmpfs
     opts: "size=50m,nosuid,mode=0700,gid=root,uid={{ nextcloud_davfs_osuser }}"
     state: mounted
-  when: nextcloud_davfs_nextrsync and nextcloud_davfs_nextrsync_tmpfs
+  when: nextcloud_davfs_nextrsync | bool and nextcloud_davfs_nextrsync_tmpfs | bool
   become: true
   become_user: root
 
@@ -100,7 +100,7 @@
   ansible.builtin.package:
     name: rsync
     state: present
-  when: nextcloud_davfs_nextrsync
+  when: nextcloud_davfs_nextrsync | bool
   become: true
   become_user: root
 
@@ -112,7 +112,7 @@
     job: >
       /bin/bash -c "/bin/bash /home/{{ nextcloud_davfs_osuser }}/{{ nextcloud_davfs_osdir }}/scripts/nextrsync
       3>&2 2>&1 1>&3- | grep -Ev 'Resource temporarily unavailable|Input/output error'"
-  when: nextcloud_davfs_nextrsync
+  when: nextcloud_davfs_nextrsync | bool
   become: true
   become_user: root
 
@@ -124,6 +124,6 @@
     job: >
       /bin/bash -c "/bin/bash /home/{{ nextcloud_davfs_osuser }}/{{ nextcloud_davfs_osdir }}/scripts/nextrsync
       3>&2 2>&1 1>&3- | grep -Ev 'Resource temporarily unavailable|Input/output error'"
-  when: nextcloud_davfs_nextrsync
+  when: nextcloud_davfs_nextrsync | bool
   become: true
   become_user: root
