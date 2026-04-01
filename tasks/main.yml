@@ -4,23 +4,21 @@
     name: davfs2
     state: present
   become: true
-  become_user: root
 
 - name: Adding osuser to davfs2 group to let him mount it itself
   ansible.builtin.user:
-    name: '{{ nextcloud_davfs_osuser }}'
+    name: "{{ nextcloud_davfs_osuser }}"
     groups: davfs2
     append: true
   become: true
-  become_user: root
 
 - name: Configure secrets
   ansible.builtin.lineinfile:
     path: /etc/davfs2/secrets
     regexp: "^{{ nextcloud_davfs_cloud_url }}"
     line: "{{ nextcloud_davfs_cloud_url }} {{ nextcloud_davfs_cloud_user }} {{ nextcloud_davfs_cloud_password }}"
+  no_log: true
   become: true
-  become_user: root
 
 - name: Configure dav2fs option buf_size
   ansible.builtin.lineinfile:
@@ -28,7 +26,6 @@
     regexp: "buf_size"
     line: "buf_size        32"
   become: true
-  become_user: root
 
 - name: Configure dav2fs option use_locks
   ansible.builtin.lineinfile:
@@ -36,7 +33,6 @@
     regexp: "use_locks"
     line: "use_locks        0"
   become: true
-  become_user: root
 
 - name: Configure dav2fs option cache_size
   ansible.builtin.lineinfile:
@@ -44,7 +40,6 @@
     regexp: "cache_size"
     line: "cache_size        {{ nextcloud_davfs_cache_size }}"
   become: true
-  become_user: root
 
 - name: Configure dav2fs option table_size
   ansible.builtin.lineinfile:
@@ -52,7 +47,6 @@
     regexp: "table_size"
     line: "table_size        32768"
   become: true
-  become_user: root
 
 - name: "Ensure Nextcloud directory in /home/{{ nextcloud_davfs_osuser }}"
   ansible.builtin.file:
@@ -62,17 +56,15 @@
     group: "{{ nextcloud_davfs_osgroup }}"
     mode: "0700"
   become: true
-  become_user: root
 
 - name: "Configure Nextcloud mount in /home/{{ nextcloud_davfs_osuser }}"
   ansible.posix.mount:
     path: "/home/{{ nextcloud_davfs_osuser }}/{{ nextcloud_davfs_osdir }}"
-    src: https://cloud.oxi.ch/remote.php/webdav
+    src: "{{ nextcloud_davfs_cloud_url }}"
     fstype: davfs
     opts: "user,auto,uid={{ nextcloud_davfs_osuser }},gid={{ nextcloud_davfs_osgroup }},file_mode=600,dir_mode=700,_netdev"
     state: mounted
   become: true
-  become_user: root
 
 - name: "Ensure Nextcloud .nextrsync directory in /home/{{ nextcloud_davfs_osuser }}"
   ansible.builtin.file:
@@ -83,7 +75,6 @@
     mode: "0700"
   when: nextcloud_davfs_nextrsync | bool
   become: true
-  become_user: root
 
 - name: "Configure .nextrsync mount in /home/{{ nextcloud_davfs_osuser }}"
   ansible.posix.mount:
@@ -94,7 +85,6 @@
     state: mounted
   when: nextcloud_davfs_nextrsync | bool and nextcloud_davfs_nextrsync_tmpfs | bool
   become: true
-  become_user: root
 
 - name: Install rsync for nextrsync
   ansible.builtin.package:
@@ -102,7 +92,6 @@
     state: present
   when: nextcloud_davfs_nextrsync | bool
   become: true
-  become_user: root
 
 - name: Configure nextrsync crontab
   ansible.builtin.cron:
@@ -114,7 +103,6 @@
       3>&2 2>&1 1>&3- | grep -Ev 'Resource temporarily unavailable|Input/output error'"
   when: nextcloud_davfs_nextrsync | bool
   become: true
-  become_user: root
 
 - name: Configure nextrsync at boot
   ansible.builtin.cron:
@@ -126,4 +114,3 @@
       3>&2 2>&1 1>&3- | grep -Ev 'Resource temporarily unavailable|Input/output error'"
   when: nextcloud_davfs_nextrsync | bool
   become: true
-  become_user: root
