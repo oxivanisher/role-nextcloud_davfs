@@ -1,0 +1,10 @@
+[Unit]
+Description=Nextcloud rsync sync timer for {{ nextcloud_davfs_osuser }}
+
+[Timer]
+OnBootSec={{ nextcloud_davfs_nextrsync_on_boot_delay }}
+OnUnitActiveSec={{ nextcloud_davfs_nextrsync_interval }}
+Persistent=true
+
+[Install]
+WantedBy=timers.target

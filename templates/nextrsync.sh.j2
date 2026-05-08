@@ -1,0 +1,27 @@
+#!/bin/bash
+# {{ ansible_managed }}
+
+NC_DIR="/home/{{ nextcloud_davfs_osuser }}/{{ nextcloud_davfs_osdir }}"
+DST="/home/{{ nextcloud_davfs_osuser }}/.nextrsync"
+
+if ! mountpoint -q "$NC_DIR"; then
+  echo "Nextcloud mount not active at $NC_DIR"
+  exit 1
+fi
+
+RSYNC=$(command -v rsync)
+if [ -z "$RSYNC" ]; then
+  echo "ERROR: rsync was not found!"
+  exit 1
+fi
+
+{% for dir in nextcloud_davfs_nextrsync_dirs %}
+mkdir -p "$DST/{{ dir }}"
+rsync --delete -rltogD "$NC_DIR/{{ dir }}/" "$DST/{{ dir }}"
+{% endfor %}
+
+touch /tmp/.last_nextrsync_run
+
+{% for cmd in nextcloud_davfs_nextrsync_post_commands %}
+{{ cmd }}
+{% endfor %}

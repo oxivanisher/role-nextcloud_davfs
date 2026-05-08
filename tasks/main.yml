@@ -93,22 +93,63 @@
   when: nextcloud_davfs_nextrsync | bool
   become: true
 
-- name: Configure nextrsync crontab
+- name: Remove legacy nextrsync cron jobs
   ansible.builtin.cron:
-    name: "Nextrsync for {{ nextcloud_davfs_osuser }}"
+    name: "{{ item }}"
     user: "{{ nextcloud_davfs_osuser }}"
-    minute: "*/5"
-    job: >
-      /bin/bash -c "/bin/bash /home/{{ nextcloud_davfs_osuser }}/{{ nextcloud_davfs_osdir }}/scripts/nextrsync 3>&2 2>&1 1>&3- | grep -Ev 'Resource temporarily unavailable|Input/output error'"
+    state: absent
+  loop:
+    - "Nextrsync for {{ nextcloud_davfs_osuser }}"
+    - "Nextrsync for {{ nextcloud_davfs_osuser }} at boot"
   when: nextcloud_davfs_nextrsync | bool
   become: true
 
-- name: Configure nextrsync at boot
-  ansible.builtin.cron:
-    name: "Nextrsync for {{ nextcloud_davfs_osuser }} at boot"
-    user: "{{ nextcloud_davfs_osuser }}"
-    special_time: reboot
-    job: >
-      /bin/bash -c "/bin/bash /home/{{ nextcloud_davfs_osuser }}/{{ nextcloud_davfs_osdir }}/scripts/nextrsync 3>&2 2>&1 1>&3- | grep -Ev 'Resource temporarily unavailable|Input/output error'"
+- name: Get systemd mount unit name for nextrsync dependency
+  ansible.builtin.command:
+    argv:
+      - systemd-escape
+      - -p
+      - --suffix=mount
+      - /home/{{ nextcloud_davfs_osuser }}/{{ nextcloud_davfs_osdir }}
+  register: _nextcloud_davfs_mount_unit
+  changed_when: false
+  when: nextcloud_davfs_nextrsync | bool
+
+- name: Deploy nextrsync script to /usr/local/bin
+  ansible.builtin.template:
+    src: nextrsync.sh.j2
+    dest: /usr/local/bin/nextrsync
+    owner: root
+    group: root
+    mode: "0755"
+  when: nextcloud_davfs_nextrsync | bool
+  become: true
+
+- name: Deploy nextrsync systemd service unit
+  ansible.builtin.template:
+    src: nextrsync.service.j2
+    dest: "/etc/systemd/system/nextrsync_{{ nextcloud_davfs_osuser }}.service"
+    owner: root
+    group: root
+    mode: "0644"
+  when: nextcloud_davfs_nextrsync | bool
+  become: true
+
+- name: Deploy nextrsync systemd timer unit
+  ansible.builtin.template:
+    src: nextrsync.timer.j2
+    dest: "/etc/systemd/system/nextrsync_{{ nextcloud_davfs_osuser }}.timer"
+    owner: root
+    group: root
+    mode: "0644"
+  when: nextcloud_davfs_nextrsync | bool
+  become: true
+
+- name: Enable and start nextrsync timer
+  ansible.builtin.systemd:
+    name: "nextrsync-{{ nextcloud_davfs_osuser }}.timer"
+    enabled: true
+    state: started
+    daemon_reload: true
   when: nextcloud_davfs_nextrsync | bool
   become: true

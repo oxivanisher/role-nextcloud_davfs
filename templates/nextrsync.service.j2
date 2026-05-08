@@ -1,0 +1,10 @@
+[Unit]
+Description=Nextcloud rsync sync for {{ nextcloud_davfs_osuser }}
+After={{ _nextcloud_davfs_mount_unit.stdout }}
+Requires={{ _nextcloud_davfs_mount_unit.stdout }}
+
+[Service]
+Type=oneshot
+User={{ nextcloud_davfs_osuser }}
+Group={{ nextcloud_davfs_osgroup }}
+ExecStart=/usr/local/bin/nextrsync
