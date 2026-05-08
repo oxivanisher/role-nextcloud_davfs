@@ -9,16 +9,32 @@ if ! mountpoint -q "$NC_DIR"; then
   exit 1
 fi
 
+# Guard against stale/broken mounts that still pass mountpoint -q
+if ! timeout 5 ls "$NC_DIR" > /dev/null 2>&1; then
+  echo "Nextcloud mount at $NC_DIR is not accessible (stale or broken)"
+  exit 1
+fi
+
 RSYNC=$(command -v rsync)
 if [ -z "$RSYNC" ]; then
   echo "ERROR: rsync was not found!"
   exit 1
 fi
 
+DIRS=(
 {% for dir in nextcloud_davfs_nextrsync_dirs %}
-mkdir -p "$DST/{{ dir }}"
-rsync --delete -rltogD "$NC_DIR/{{ dir }}/" "$DST/{{ dir }}"
+  "{{ dir }}"
 {% endfor %}
+)
+
+for DIR in "${DIRS[@]}"; do
+  if [ ! -d "$NC_DIR/$DIR" ]; then
+    echo "Source $NC_DIR/$DIR not found, skipping"
+    continue
+  fi
+  mkdir -p "$DST/$DIR"
+  rsync --delete -rltogD "$NC_DIR/$DIR/" "$DST/$DIR"
+done
 
 touch /tmp/.last_nextrsync_run
 
