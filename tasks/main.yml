@@ -147,7 +147,7 @@
 
 - name: Enable and start nextrsync timer
   ansible.builtin.systemd:
-    name: "nextrsync-{{ nextcloud_davfs_osuser }}.timer"
+    name: "nextrsync_{{ nextcloud_davfs_osuser }}.timer"
     enabled: true
     state: started
     daemon_reload: true
